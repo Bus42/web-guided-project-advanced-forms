@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Friend from './Friend'
 import FriendForm from './FriendForm'
+import * as yup from 'yup'
+
+import schema from '../validation/formSchema'
+
 // 🔥 STEP 1- CHECK THE ENDPOINTS IN THE README
 // 🔥 STEP 2- FLESH OUT FriendForm.js
 // 🔥 STEP 3- FLESH THE SCHEMA IN ITS OWN FILE
@@ -80,14 +84,22 @@ export default function App() {
     axios
     .post("http://buddies.com/api/friends", newFriend)
     .then(response => {
-      debugger
       // set the new friend into state using setFriends
-
+      setFriends([...friends, response.data])
+      setFormValues(initialFormValues)
     })
     .catch(err => {
-      debugger
+      setFormValues(initialFormValues)
+      console.log(err)
     })
   }
+
+  // const validateEmail = value => {
+  //   // t@tc.io
+  //   if (value.length < 7 || !value.includes("@")) {
+  //     setFormErrors()
+  //   }
+  // }
 
   //////////////// EVENT HANDLERS ////////////////
   //////////////// EVENT HANDLERS ////////////////
@@ -100,10 +112,25 @@ export default function App() {
     // newFormValues[name] = value
     // setFormValues(newFormValues)
 
-    setFormValues({
-      ...formValues,
-      [name]: value // NOT AN ARRAY, computed property names
+    yup
+    .reach(schema, name) // get to this part of the schema
+    .validate(value) // validate this value
+    .then(() => {
+      setFormErrors({
+      ...formErrors, // keep whatever other errors you have,
+      [name]: " ",
+      })
     })
+    .catch(err => {
+      setFormErrors({
+        ...formErrors,
+        [name]: err.errors[0] // add this error to whatever errors were already in formErrors
+      })
+    })
+      setFormValues({
+        ...formValues,
+        [name]: value // NOT AN ARRAY, computed property names
+      })
   }
 
   const formSubmit = () => {
@@ -128,7 +155,11 @@ export default function App() {
 
   useEffect(() => {
     // 🔥 STEP 9- ADJUST THE STATUS OF `disabled` EVERY TIME `formValues` CHANGES
-  }, [])
+    schema.isValid(formValues)
+    .then(valid => {
+      setDisabled(!valid)
+    })
+  }, [formValues])
 
   return (
     <div className='container'>
