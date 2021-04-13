@@ -45,10 +45,10 @@ export default function FriendForm(props) {
         {/* ////////// TEXT INPUTS ////////// */}
         <label>Username&nbsp;
           <input
-            value={values.username}
-            onChange={onChange}
             name='username'
             type='text'
+            value={values.username}
+            onChange={onChange}
           />
         </label>
 
@@ -64,6 +64,7 @@ export default function FriendForm(props) {
         {/* ////////// DROPDOWN ////////// */}
         {/* ////////// DROPDOWN ////////// */}
         {/* ////////// DROPDOWN ////////// */}
+        {/* Why does the select take a value attribute?  */}
         <label>Role
           <select
             onChange={onChange}
@@ -82,10 +83,26 @@ export default function FriendForm(props) {
         {/* ////////// RADIO BUTTONS ////////// */}
         {/* ////////// RADIO BUTTONS ////////// */}
         <label>Single
+          <input
+          type='radio'
+          checked={values.civil === "single"}
+          name="civil"
+          value="single"
+          onChange={onChange}
+          />
+
 
         </label>
 
         <label>Married
+          <input
+          type='radio'
+          checked={values.civil === "married"}
+          name="civil"
+          value="married"
+          onChange={onChange}
+          />
+
 
         </label>
       </div>
