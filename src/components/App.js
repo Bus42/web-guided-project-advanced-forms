@@ -32,6 +32,20 @@ const initialFormErrors = {
 const initialFriends = []
 const initialDisabled = true
 
+// Happy path
+// getFriends will use axios and setFriends to get our friends data
+// a bunch of Friend components display all the friends
+// FriendForm displays formValues, and uses setFormValues to update them
+// on submit, make a new friend, send to server
+// then user setFriends to add to our friends state
+// re-render, go to Step 2
+
+// Sad path
+// getFriends will use axios and setFriends to get our friends data
+// a bunch of Friend components display all the friends
+// FriendForm displays formValues, and uses setFormValues to update them
+// we check the input, and display an error if it's bad, and disable submit
+
 
 export default function App() {
   //////////////// STATES ////////////////
@@ -48,6 +62,10 @@ export default function App() {
   const getFriends = () => {
     // 🔥 STEP 5- IMPLEMENT! ON SUCCESS PUT FRIENDS IN STATE
     //    helper to [GET] all friends from `http://buddies.com/api/friends`
+    axios
+    .get()
+    .then() // use setFriends on success
+    .catch()
   }
 
   const postNewFriend = newFriend => {
@@ -83,7 +101,7 @@ export default function App() {
   //////////////// SIDE EFFECTS ////////////////
   useEffect(() => {
     getFriends()
-  }, [])
+  }, []) // watcher array: run again if these variables change
 
   useEffect(() => {
     // 🔥 STEP 9- ADJUST THE STATUS OF `disabled` EVERY TIME `formValues` CHANGES
