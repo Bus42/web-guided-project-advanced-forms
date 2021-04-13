@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Friend from './Friend'
 import FriendForm from './FriendForm'
 // 🔥 STEP 1- CHECK THE ENDPOINTS IN THE README
@@ -62,16 +63,30 @@ export default function App() {
   const getFriends = () => {
     // 🔥 STEP 5- IMPLEMENT! ON SUCCESS PUT FRIENDS IN STATE
     //    helper to [GET] all friends from `http://buddies.com/api/friends`
-    // axios
-    // .get()
-    // .then() // use setFriends on success
-    // .catch()
+    axios
+    .get("http://buddies.com/api/friends")
+    .then(response => {
+      setFriends(response.data)
+    }) // use setFriends on success
+    .catch(err => {
+        debugger
+      })
   }
 
   const postNewFriend = newFriend => {
     // 🔥 STEP 6- IMPLEMENT! ON SUCCESS ADD NEWLY CREATED FRIEND TO STATE
     //    helper to [POST] `newFriend` to `http://buddies.com/api/friends`
     //    and regardless of success or failure, the form should reset
+    axios
+    .post("http://buddies.com/api/friends", newFriend)
+    .then(response => {
+      debugger
+      // set the new friend into state using setFriends
+
+    })
+    .catch(err => {
+      debugger
+    })
   }
 
   //////////////// EVENT HANDLERS ////////////////
@@ -79,9 +94,15 @@ export default function App() {
   //////////////// EVENT HANDLERS ////////////////
   const inputChange = (name, value) => {
     // 🔥 STEP 10- RUN VALIDATION WITH YUP
+
+    // old way of doing it
+    // const newFormValues = { ...formValues }
+    // newFormValues[name] = value
+    // setFormValues(newFormValues)
+
     setFormValues({
       ...formValues,
-      [name]: value // NOT AN ARRAY
+      [name]: value // NOT AN ARRAY, computed property names
     })
   }
 
@@ -92,8 +113,10 @@ export default function App() {
       role: formValues.role.trim(),
       civil: formValues.civil.trim(),
       // 🔥 STEP 7- WHAT ABOUT HOBBIES?
+      hobbies: ["coding", "reading", "hiking"].filter(hobby => formValues[hobby])
     }
     // 🔥 STEP 8- POST NEW FRIEND USING HELPER
+    postNewFriend(newFriend)
   }
 
   //////////////// SIDE EFFECTS ////////////////
