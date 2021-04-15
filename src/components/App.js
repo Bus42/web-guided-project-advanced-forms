@@ -90,18 +90,22 @@ export default function App() {
     yup
       .reach(schema, name)
       .validate(value)
-      .then(() =>
-        {
-          setFormValues({
-          ...formValues,
-          [name]: value, // NOT AN ARRAY
-        })
-        setFormValues({
-          ...formValues, [name]: value
-        })
-      }
-      )
-      .catch(err => setFormErrors({...formErrors, [name]:err.errors[0]}) )
+      .then(() => {
+        setFormErrors({
+          ...formErrors,
+          [name]: " ",
+        });
+      })
+      .catch((err) => {
+        setFormErrors({
+          ...formErrors,
+          [name]: err.errors[0],
+        });
+      });
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
   };
 
   const formSubmit = () => {
